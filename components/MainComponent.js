@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Menu from './MenuComponent';
 import Dishdetail from './DishDetailComponent';
 import { View, Text, Platform, Image, StyleSheet, ScrollView } from 'react-native';
@@ -10,6 +10,15 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators'
+
+const mapDispatchToProps = dispatch => ({
+  fetchDishes: () => dispatch(fetchDishes()),
+  fetchComments: () => dispatch(fetchComments()),
+  fetchPromos: () => dispatch(fetchPromos()),
+  fetchLeaders: () => dispatch(fetchLeaders())
+})
 
 const NavigatorComponent = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -236,7 +245,14 @@ const MainNavigator = ({ navigation }) => {
 }
 
 // Main Component
-const Main = () => {
+const Main = (props) => {
+
+  useEffect(() => {
+    props.fetchDishes();
+    props.fetchComments();
+    props.fetchPromos();
+    props.fetchLeaders();
+  }, [])
 
   return (
     <NavigationContainer  >
@@ -244,7 +260,13 @@ const Main = () => {
     </NavigationContainer>
   );
 }
- 
+
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishes
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -269,4 +291,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Main;
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

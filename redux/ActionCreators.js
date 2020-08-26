@@ -1,7 +1,7 @@
 import * as ActionTypes from './Actiontypes';
 import { baseUrl } from '../shared/baseUrl';
 
-export const fetchComments = async dispatch => {
+export const fetchComments = () => async dispatch => {
     
     try {
         let response = await fetch(baseUrl + 'comments');
@@ -28,7 +28,7 @@ export const addComments = (comments) => ({
     payload: comments
 })
 
-export const fetchDishes = async dispatch => {
+export const fetchDishes = () => async dispatch => {
     dispatch(dishesLoading())
 
     try {
@@ -60,7 +60,7 @@ export const addDishes = (dishes) => ({
     payload: dishes
 })
 
-export const fetchPromos = async dispatch => {
+export const fetchPromos = () => async dispatch => {
     dispatch(promosLoading())
 
     try {
@@ -92,7 +92,7 @@ export const addPromos = (promos) => ({
     payload: promos
 })
 
-export const fetchLeaders = async dispatch => {
+export const fetchLeaders = () => async dispatch => {
     dispatch(leadersLoading())
 
     try {

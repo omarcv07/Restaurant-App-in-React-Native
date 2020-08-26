@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { ScrollView, View, Text, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { Card } from 'react-native-elements';
-import { LEADERS } from '../shared/leaders';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
 
 const LeadersCard = ({ leaders }) => {
 
@@ -13,7 +14,7 @@ const LeadersCard = ({ leaders }) => {
                 title={item.name}
                 subtitle={item.description}
                 hideChevrom={true}
-                leftAvatar={{ source: require('./images/alberto.png') }}
+                leftAvatar={{ source: { uri: baseUrl + item.image } }}
             />
         );
     }
@@ -48,16 +49,22 @@ const History = () => {
     );
 }
 
-const About = () => {
+const About = (props) => {
 
-    const [leaders, setLeaders] = useState(LEADERS)
+    const { leaders } = props
 
     return (
         <ScrollView>
             <History />
-            <LeadersCard leaders={leaders} />
+            <LeadersCard leaders={leaders.leaders} />
         </ScrollView>
     );
 }
 
-export default About
+const mapStateToProps = state => {
+    return {
+        leaders: state.leaders
+    }
+}
+
+export default connect(mapStateToProps)(About);

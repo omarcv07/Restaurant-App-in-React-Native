@@ -1,6 +1,7 @@
 import * as ActionTypes from './Actiontypes';
 import { baseUrl } from '../shared/baseUrl';
 
+
 export const fetchComments = () => async dispatch => {
     
     try {
@@ -123,3 +124,18 @@ export const addLeaders = (leaders) => ({
     type: ActionTypes.ADD_LEADERS,
     payload: leaders
 })
+
+export const postFavorite = (dishId) => async dispatch => {
+
+    let promise = new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(dispatch(addFavorite(dishId)))
+        }, 2000);
+    })
+    return await promise
+}
+
+export const addFavorite = (dishId) => ({
+    type: ActionTypes.ADD_FAVORITE,
+    payload: dishId
+});

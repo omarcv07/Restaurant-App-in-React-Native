@@ -4,6 +4,7 @@ import { ListItem } from 'react-native-elements';
 import { Card } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent'
 
 const LeadersCard = ({ leaders }) => {
 
@@ -19,15 +20,37 @@ const LeadersCard = ({ leaders }) => {
         );
     }
 
-    return (
-        <Card title='Corporate Leadership'>
-            <FlatList 
-                data={leaders}
-                renderItem={RenderLeaders}
-                keyExtractor={item => item.id.toString()}
-            />
-        </Card>
-    );
+    if (leaders.isLoading) {
+        return (
+            <ScrollView>
+                <History />
+                    <Card title='Corporate Leadership'>
+                    <Loading />
+                </Card>
+            </ScrollView>
+        );
+    }
+    else if (leaders.errMess) {
+        return (
+            <ScrollView>
+                <History />
+                    <Card title='Corporate Leadership'>
+                    <Text>{leaders.errMess}</Text>
+                </Card>
+            </ScrollView>
+        );
+    } 
+    else {
+        return (
+            <Card title='Corporate Leadership'>
+                <FlatList 
+                    data={leaders.leaders}
+                    renderItem={RenderLeaders}
+                    keyExtractor={item => item.id.toString()}
+                />
+            </Card>
+        );
+    }
 }
 
 const History = () => {
@@ -51,12 +74,12 @@ const History = () => {
 
 const About = (props) => {
 
-    const { leaders } = props
+    const { leaders } = props;
 
     return (
         <ScrollView>
             <History />
-            <LeadersCard leaders={leaders.leaders} />
+            <LeadersCard leaders={leaders} />
         </ScrollView>
     );
 }

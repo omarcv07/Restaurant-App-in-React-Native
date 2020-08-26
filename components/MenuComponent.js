@@ -3,10 +3,12 @@ import { View, FlatList } from 'react-native';
 import { Tile } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent';
 
 const Menu = (props) => {
 
   const { dishes } = props
+  const { navigate } = props.navigation
 
     const renderMenuItem = ({ item, index }) => {
         return (
@@ -21,15 +23,27 @@ const Menu = (props) => {
         ); 
     }
 
-    const { navigate } = props.navigation
-
-    return (
-        <FlatList 
-            data={dishes.dishes}
-            renderItem={renderMenuItem}
-            keyExtractor={item => item.id.toString()}
-            />
-    );
+    if (dishes.isLoading) {
+        return (
+            <Loading />
+        );
+    }
+    else if (dishes.errMess) {
+        return (
+            <View>
+                <Text>{dishes.errMess}</Text>
+            </View>
+        );
+    }
+    else {
+        return (
+            <FlatList 
+                data={dishes.dishes}
+                renderItem={renderMenuItem}
+                keyExtractor={item => item.id.toString()}
+                />
+        );
+    }
 }
 
 const mapStateToProps = state => {

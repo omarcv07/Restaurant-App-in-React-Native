@@ -11,7 +11,8 @@ import Contact from './ContactComponent';
 import About from './AboutComponent';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators'
+import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
+import Reservation from './ReservationComponent';
 
 const mapDispatchToProps = dispatch => ({
   fetchDishes: () => dispatch(fetchDishes()),
@@ -171,6 +172,32 @@ const AboutNavigatorScreen = ({ navigation }) => {
   );
 }
 
+const ReservationNavigatorScreen = ({ navigation }) => {
+  return (
+    <NavigatorComponent.Navigator
+      initialRouteName='Reservation'
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#512DA8'
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            color: '#fff'
+          }
+        }}>
+        <NavigatorComponent.Screen
+          name='Reservation'
+          component={Reservation}
+          options={
+            () => ({
+              headerLeft: () => <MenuIcon navigation={navigation} />
+            })
+          }
+          />
+    </NavigatorComponent.Navigator>
+  );
+}
+
 // Sidebar
 const MainNavigator = ({ navigation }) => {
   return (
@@ -238,6 +265,13 @@ const MainNavigator = ({ navigation }) => {
                 color={color}              
               />
           )
+        }}
+      />
+      <Drawer.Screen
+        name='Reservation'
+        component={ReservationNavigatorScreen}
+        options={{
+          drawerLabel: 'Reservation',
         }}
       />
     </Drawer.Navigator>

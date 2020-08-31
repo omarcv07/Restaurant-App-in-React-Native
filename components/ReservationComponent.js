@@ -20,7 +20,7 @@ const Reservation = () => {
     const initialState = {
       guests,
       smoking,
-      ...dateInfo
+      dateInfo
     };
 
     const changeShowMode = () => {
@@ -96,7 +96,7 @@ const Reservation = () => {
                   display="default"
                   mode={dateInfo.mode}
                   minimumDate={new Date()}
-                  minuteInterval={30}
+                  minuteInterval={60}
                   onChange={(event, dateTime) => {
                     if (dateTime === undefined) {
                       updateInfo({ show: false });
@@ -152,18 +152,18 @@ const Reservation = () => {
 
 const styles = StyleSheet.create({
     formRow: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
-        flexDirection: 'row',
-        margin: 20
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 1,
+      flexDirection: 'row',
+      margin: 20
     },
     formLabel: {
-        fontSize: 18,
-        flex: 2
+      fontSize: 18,
+      flex: 2
     },
     formItem: {
-        flex: 1
+      flex: 1
     },
     modal: {
       justifyContent: 'center',

@@ -13,6 +13,7 @@ import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 import Reservation from './ReservationComponent';
+import Favorites from './FavoriteComponent';
 
 const mapDispatchToProps = dispatch => ({
   fetchDishes: () => dispatch(fetchDishes()),
@@ -198,6 +199,32 @@ const ReservationNavigatorScreen = ({ navigation }) => {
   );
 }
 
+const FavoritesNavigatorScreen = ({ navigation }) => {
+  return (
+    <NavigatorComponent.Navigator
+      initialRouteName='Favorites'
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#512DA8'
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            color: '#fff'
+          }
+        }}>
+        <NavigatorComponent.Screen
+          name='Reservation'
+          component={Favorites}
+          options={
+            () => ({
+              headerLeft: () => <MenuIcon navigation={navigation} />
+            })
+          }
+          />
+    </NavigatorComponent.Navigator>
+  );
+}
+
 // Sidebar
 const MainNavigator = ({ navigation }) => {
   return (
@@ -268,10 +295,33 @@ const MainNavigator = ({ navigation }) => {
         }}
       />
       <Drawer.Screen
+        name='My Favorites'
+        component={FavoritesNavigatorScreen}
+        options={{
+          drawerLabel: 'My Favorites',
+          drawerIcon: ({ color }) => (
+            <Icon 
+              name='heart'
+              type='font-awesome'
+              size={24}
+              color={color}
+              />
+          )
+        }}
+      />
+      <Drawer.Screen
         name='Reservation'
         component={ReservationNavigatorScreen}
         options={{
           drawerLabel: 'Reservation',
+          drawerIcon: ({ color }) => (
+            <Icon 
+              name='cutlery'
+              type='font-awesome'
+              size={24}
+              color={color}
+              />
+          )
         }}
       />
     </Drawer.Navigator>

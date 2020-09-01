@@ -1,26 +1,38 @@
 import React, { useState } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Text } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
-// import { favorites } from '../redux/favorite';
+import Swipeout from 'react-native-swipeout';
+import { deleteFavorite } from '../redux/ActionCreators';
 
 const Favorites = (props) => {
 
-    const { dishes, favorites } = props;
+    const { dishes, favorites, deleteFavorite } = props;
     const { navigate } = props.navigation
 
     const renderMenuItem = ({ item, index }) => {
+
+        const rightButton = [
+            {
+                text: 'Delete',
+                type: 'delete',
+                onPress: () => deleteFavorite(item.id)
+            }
+        ];
+
         return (
-            <ListItem 
-                key={index}
-                title={item.name}
-                subtitle={item.description}
-                hideChevron={true}
-                onPress={() => navigate('Dishdetail', { dishId: item.id })}
-                leftAvatar={{ source: { uri: baseUrl + item.image }}}
-                />
+            <Swipeout right={rightButton} autoClose={true}> 
+                <ListItem 
+                    key={index}
+                    title={item.name}
+                    subtitle={item.description}
+                    hideChevron={true}
+                    onPress={() => navigate('Dishdetail', { dishId: item.id })}
+                    leftAvatar={{ source: { uri: baseUrl + item.image }}}
+                    />
+            </Swipeout>
         );
     }
 
@@ -54,4 +66,8 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(Favorites)
+const mapDispatchToProps = dispatch => ({
+    deleteFavorite: (dishId) => dispatch(deleteFavorite(dishId))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Favorites)

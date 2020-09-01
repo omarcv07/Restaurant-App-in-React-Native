@@ -140,24 +140,6 @@ export const addFavorite = (dishId) => ({
     payload: dishId
 });
 
-// export const postComment = (dishId, rating, author, comment) => async dispatch => {
-
-//     const newComment = {
-//         dishId: dishId,
-//         rating: rating, 
-//         author: author,
-//         comment: comment,
-//         date: new Date().toISOString()
-//     }
-    
-//     let promise = new Promise((resolve) => {
-//         setTimeout(() => {
-//             resolve(dispatch(addComment(newComment)))
-//         }, 2000);
-//     })
-//     return await promise
-// }
-
 export const postComment = (dishId, rating, author, comment) => async dispatch => {
 
     const newComment = {
@@ -194,4 +176,9 @@ export const postComment = (dishId, rating, author, comment) => async dispatch =
 export const addComment = (comment) => ({
     type: ActionTypes.ADD_COMMENT,
     payload: comment
+});
+
+export const deleteFavorite = (dishId) => ({
+    type: ActionTypes.DELETE_FAVORITE,
+    payload: dishId
 });

@@ -4,7 +4,8 @@ import { ListItem } from 'react-native-elements';
 import { Card } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import { Loading } from './LoadingComponent'
+import { Loading } from './LoadingComponent';
+import * as Animatable from 'react-native-animatable';
 
 const LeadersCard = ({ leaders }) => {
 
@@ -33,22 +34,29 @@ const LeadersCard = ({ leaders }) => {
     else if (leaders.errMess) {
         return (
             <ScrollView>
-                <History />
-                    <Card title='Corporate Leadership'>
-                    <Text>{leaders.errMess}</Text>
-                </Card>
+                <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                    <History />
+                        <Card title='Corporate Leadership'>
+                        <Text>{leaders.errMess}</Text>
+                    </Card>
+                </Animatable.View>
             </ScrollView>
         );
     } 
     else {
         return (
-            <Card title='Corporate Leadership'>
-                <FlatList 
-                    data={leaders.leaders}
-                    renderItem={RenderLeaders}
-                    keyExtractor={item => item.id.toString()}
-                />
-            </Card>
+            <ScrollView>
+                <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                    <History />
+                    <Card title='Corporate Leadership'>
+                        <FlatList 
+                            data={leaders.leaders}
+                            renderItem={RenderLeaders}
+                            keyExtractor={item => item.id.toString()}
+                        />
+                    </Card>
+                </Animatable.View>
+            </ScrollView>
         );
     }
 }
@@ -77,10 +85,7 @@ const About = (props) => {
     const { leaders } = props;
 
     return (
-        <ScrollView>
-            <History />
-            <LeadersCard leaders={leaders} />
-        </ScrollView>
+        <LeadersCard leaders={leaders} />
     );
 }
 

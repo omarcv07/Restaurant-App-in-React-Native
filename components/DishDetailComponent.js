@@ -20,6 +20,15 @@ const RenderDish = (props) => {
         }
     }
 
+    const recognizeComment = ({ moveX, moveY, dx, dy }) => {
+        if (dx > -200) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: (e, gestureState) => {
             return true;
@@ -47,7 +56,10 @@ const RenderDish = (props) => {
                     ],
                     { cancelable: false }
                 )
-            return true;
+            else if (recognizeComment(gestureState))
+                props.onPressModal()
+
+            return true
         }
     });
 
@@ -225,61 +237,3 @@ const styles = StyleSheet.create({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dishdetail);
-
-// const Dishdetail = (props) => {
-    
-//     const  { dishes, comments, favorites, postComment } = props;
-
-//     const [showModal, setShowModal] = useState(false);
-//     const toggleModal = () => setShowModal(!showModal)
-
-//     const handleSubmit = (values) => {
-//         toggleModal();
-//         postComment(dishId, values.rating, values.author, values.comment)
-//     }
-
-//     const markFavorite = (dishId) => props.postFavorite(dishId);
-
-//     const dishId = props.route.params.dishId;
-
-//     return (
-//         <ScrollView>
-//             <RenderDish dish={dishes.dishes[+dishId]} 
-//                 favorite={favorites.some(el => el === dishId)}
-//                 onPress={() => markFavorite(dishId)}
-//                 toggleModal={() => toggleModal()}
-//             />
-//             <RenderComments comments={comments.comments.filter(comment => comment.dishId === dishId)} dishId={dishId} />
-//             <Modal
-//                 animationType={'slide'}
-//                 transparent={false}
-//                 visible={showModal}
-//                 onDismiss={() => { toggleModal() }}
-//                 onRequestClose={() => { toggleModal() }}
-//             >
-//                 <View style={styles.modal}>
-//                     <Rating showRating startingValue={0} type='star' fractions={1} /> 
-//                     <Input
-//                         placeholder="Author"
-//                         leftIcon={{ type: 'font-awesome', name: 'user' }}
-//                     />
-//                     <Input
-//                         placeholder="Comment"
-//                         leftIcon={{ type: 'font-awesome', name: 'paper-plane' }}
-//                     />
-//                     <Button 
-//                         title="Submit"
-//                         onPress={(values) => handleSubmit(values) }
-//                         color='#512DA8'
-//                         style={styles.btnStyle}
-//                     />
-//                     <Button 
-//                         title="Close"
-//                         onPress={() => toggleModal() }
-//                         color='gray'
-//                     />
-//                 </View>
-//             </Modal>
-//         </ScrollView>
-//     );
-// }   

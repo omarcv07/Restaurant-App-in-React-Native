@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Card, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
-import { set } from 'react-native-reanimated';
+import * as Animatable from 'react-native-animatable';
 
 const Reservation = () => {
 
@@ -32,21 +32,45 @@ const Reservation = () => {
     };
       
     const handleReservation = () => {
+        confirmReservation();
         console.log(JSON.stringify(initialState));
-        updateDateInfo(initialState);
         toggleModal();
     }
 
     const toggleModal = () => {
-      setShowModal(!showModal)
+      setShowModal(!showModal);
     }
 
     const resetForm = () => {
-      initialState
+      setGuests(1)
+      setSmoking(false)
+      updateDateInfo({
+        date: new Date(),
+        show: false,
+        mode: 'date',
+      })
+    }
+
+    const confirmReservation = () => {
+      Alert.alert(
+        'Your Reservation OK?',
+        `Number of Guests: ${guests} \nSmoking? ${smoking} \nDate and Time: ${' ' + Moment(dateInfo.date).format('DD-MMM-YYYY h:mm A')}`,
+        [
+          {
+            text: "Cancel",
+            onPress: () => resetForm(),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => resetForm() }
+        ],
+        { cancelable: false }
+      );
+
     }
 
     return (
         <ScrollView>
+          <Animatable.View animation='zoomIn' duration={2000} delay={1000}>
             <View style={styles.formRow}>
                 <Text style={styles.formLabel}>Number of Guests</Text>
                 <Picker
@@ -126,26 +150,7 @@ const Reservation = () => {
                 accessibilityLabel="Learn more about this purple button"
               />
             </View>
-            <Modal
-              animationType={'slide'}
-              transparent={false}
-              visible={showModal}
-              onDismiss={() => { toggleModal(), resetForm() }}
-              onRequestClose={() => { toggleModal(), resetForm() }}
-            >
-              <View style={styles.modal}>
-                  <Text style={styles.modalTitle}>Your Reservation</Text>
-                  <Text style={styles.modalText}>Number of Guests: {guests}</Text>
-                  <Text style={styles.modalText}>Smoking? : {smoking ? 'Yes' : 'No'}</Text>
-                  <Text style={styles.modalText}>Date and Time : {' ' + Moment(dateInfo.date).format('DD-MMM-YYYY h:mm A')}</Text>
-                  <Button 
-                    title="Close"
-                    onPress={() => { toggleModal(), resetForm() }}
-                    color='#512DA8'
-                    />
-              </View>
-            </Modal>
-                  
+          </Animatable.View>    
         </ScrollView>
     );
 }

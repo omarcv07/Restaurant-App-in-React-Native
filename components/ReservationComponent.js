@@ -5,6 +5,8 @@ import { Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import * as Animatable from 'react-native-animatable';
+import * as Permissions from 'expo-permissions';
+import { Notifications } from 'expo';
 
 const Reservation = () => {
 
@@ -61,11 +63,51 @@ const Reservation = () => {
             onPress: () => resetForm(),
             style: "cancel"
           },
-          { text: "OK", onPress: () => resetForm() }
+          { text: "OK", onPress: () => {
+              presentLocalNotifications(Moment(dateInfo.date).format('DD-MMM-YYYY h:mm A'))
+              resetForm()
+            } 
+          }
         ],
         { cancelable: false }
       );
 
+    }
+
+    const obtainNotificationPermission = async () => {
+      let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
+      if (permission.status !== 'granted') {
+        permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
+        if (permission.status !== 'granted') {
+          Alert.alert('Permission not granted to show notifications')
+        }
+      }
+      return permission;
+    }
+
+    const presentLocalNotifications = async (date) => {
+      await obtainNotificationPermission();
+      Notifications.presentLocalNotificationAsync({
+        title: 'Your Reservation',
+        body: `Reservation for ${date} requested`,
+        ios: {
+          sound: true,
+          vibrate: true,
+          color: '#512DA8'
+        },
+        android: {
+          channelId: 'reservation',
+          color: "#512DA8"
+        }
+      });
+      if (Platform.OS === 'android') {
+        Notifications.createChannelAndroidAsync('reservation', {        
+          name: 'Confusion',        
+          sound: true,        
+          vibrate: [0, 250, 250, 250],
+          priority: 'max',
+        });
+      }
     }
 
     return (

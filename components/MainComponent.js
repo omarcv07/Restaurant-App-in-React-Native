@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 import Reservation from './ReservationComponent';
 import Favorites from './FavoriteComponent';
+import Login from './LoginComponent'
 
 const mapDispatchToProps = dispatch => ({
   fetchDishes: () => dispatch(fetchDishes()),
@@ -225,6 +226,32 @@ const FavoritesNavigatorScreen = ({ navigation }) => {
   );
 }
 
+const LoginNavigatorScreen = ({ navigation }) => {
+  return (
+    <NavigatorComponent.Navigator
+      initialRouteName='Login'
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#512DA8'
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            color: '#fff'
+          }
+        }}>
+        <NavigatorComponent.Screen
+          name='Login'
+          component={Login}
+          options={
+            () => ({
+              headerLeft: () => <MenuIcon navigation={navigation} />
+            })
+          }
+          />
+    </NavigatorComponent.Navigator>
+  );
+}
+
 // Sidebar
 const MainNavigator = ({ navigation }) => {
   return (
@@ -234,6 +261,21 @@ const MainNavigator = ({ navigation }) => {
       }}
       drawerContent={props => <CustomDrawerContentComponent {...props}/>}
     >
+      <Drawer.Screen 
+        name='Login' 
+        component={LoginNavigatorScreen} 
+        options={{
+          drawerLabel: 'Login',
+          drawerIcon: ({ color }) => (
+            <Icon
+              name='sign-in'
+              type='font-awesome'
+              size={24}
+              color={color}
+            />
+          )
+        }}
+      />
       <Drawer.Screen 
         name='Home' 
         component={HomeNavigatorScreen} 

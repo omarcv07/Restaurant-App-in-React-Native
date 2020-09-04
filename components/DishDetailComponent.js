@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, FlatList, Button, Modal, StyleSheet, Alert, PanResponder } from 'react-native';
+import { View, Text, ScrollView, FlatList, Button, Modal, StyleSheet, Alert, PanResponder, Share } from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -63,6 +63,16 @@ const RenderDish = (props) => {
         }
     });
 
+    const shareDish = (title, message, url) => {
+        Share.share({
+            title: title,
+            message: `${title}: ${message} ${url}`,
+            url: url
+        }, {
+            dialogTitle: `Share ${title}`
+        });
+    }
+
     if (dish != null) {
         return (
             <Animatable.View animation='fadeInDown' duration={2000} delay={1000}
@@ -91,6 +101,15 @@ const RenderDish = (props) => {
                             type='font-awesome'
                             color='#512DA8'
                             onPress={() => props.onPressModal()}
+                        />
+                        <Icon
+                            raised
+                            reverse
+                            name={'share'}
+                            type='font-awesome'
+                            color='#51D2A8'
+                            style={styles.cardItem}
+                            onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)}
                         />
                     </View>
                 </Card>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Menu from './MenuComponent';
 import Dishdetail from './DishDetailComponent';
-import { View, Text, Platform, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Platform, Image, StyleSheet, ScrollView, ToastAndroid } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
@@ -15,6 +15,7 @@ import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/
 import Reservation from './ReservationComponent';
 import Favorites from './FavoriteComponent';
 import Login from './LoginComponent'
+import NetInfo from '@react-native-community/netinfo';
 
 const mapDispatchToProps = dispatch => ({
   fetchDishes: () => dispatch(fetchDishes()),
@@ -378,7 +379,34 @@ const Main = (props) => {
     props.fetchComments();
     props.fetchPromos();
     props.fetchLeaders();
-  }, [])
+
+    NetInfo.fetch().then(state => {
+      console.log("Connection type", state.type);
+      console.log("Is connected?", state.isConnected);
+    });
+
+    NetInfo.addEventListener(state => {
+      handleConnectivityChange(state)
+    });
+  }, []);
+
+  const handleConnectivityChange = (connectionInfo) => {
+    switch (connectionInfo.type) {
+        case 'none': 
+            ToastAndroid.show ('You are now offline', ToastAndroid.LONG);
+            break;
+        case 'wifi':
+            ToastAndroid.show ('You are now on WiFi', ToastAndroid.LONG);
+            break;
+        case 'cellular':
+            ToastAndroid.show ('You are now on Cellular', ToastAndroid.LONG);
+            break;
+        case 'unknown':
+            ToastAndroid.show ('You are now have an Unknown connection', ToastAndroid.LONG);
+            break;
+        default: 
+    }
+  }
 
   return (
     <NavigationContainer  >

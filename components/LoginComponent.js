@@ -7,7 +7,7 @@ import * as Permissions from 'expo-permissions'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { baseUrl } from '../shared/baseUrl';
-import { State } from 'react-native-gesture-handler';
+import * as ImageManipulator from 'expo-image-manipulator'
 
 const LoginTab = (props) => {
 
@@ -123,9 +123,20 @@ const RegisterTab = (props) => {
             });
 
             if (!capturedImage.cancelled) {
-                setImageUrl(capturedImage.uri)
+                processImage(capturedImage.uri)
             }
         }
+    }
+
+    const processImage = async (imageUri) => {
+        let processedImage = await ImageManipulator.manipulateAsync(
+            imageUri,
+            [
+                { resize: { width: 600 } }
+            ],
+            { format: 'png' }
+        );
+        setImageUrl(processedImage.uri)
     }
 
     const handleRegister = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Menu from './MenuComponent';
 import Dishdetail from './DishDetailComponent';
 import { View, Text, Platform, Image, StyleSheet, ScrollView, ToastAndroid } from 'react-native';

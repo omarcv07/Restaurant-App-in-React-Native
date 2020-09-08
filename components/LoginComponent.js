@@ -128,6 +128,24 @@ const RegisterTab = (props) => {
         }
     }
 
+    const getImageFromGallery = async () => {
+        const galleryPermission = await Permissions.askAsync(Permissions.CAMERA);
+        const galleryRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+        if (galleryPermission.status === 'granted' && galleryRollPermission.status === 'granted') {
+            let enterGallery = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1
+            });
+
+            if (!enterGallery.cancelled) {
+                processImage(enterGallery.uri)
+            }
+        }
+    }
+
     const processImage = async (imageUri) => {
         let processedImage = await ImageManipulator.manipulateAsync(
             imageUri,
@@ -162,6 +180,11 @@ const RegisterTab = (props) => {
                     <Button
                         title='Camera'
                         onPress={getImageFromCamera}
+                        buttonStyle={{ marginHorizontal: 30 }}
+                        />
+                    <Button
+                        title='Gallery'
+                        onPress={getImageFromGallery}
                         />
                 </View>
                 <Input 
